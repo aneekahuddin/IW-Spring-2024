@@ -10,4 +10,4 @@ To run this code locally, you will need to do the following steps:
 
 You may need to change the cam_port number in real time reading to match the correct camera you would like to connect to. 
 
-Check "Additional Files" for a video of a working demo and a research paper that outlines the design and development process and next steps! If you'd like to get involved, please reach out to auddin@princeton.edu.
+Check "Additional Info" for a video of a working demo and a research paper that outlines the design and development process and next steps! If you'd like to get involved, please reach out to auddin@princeton.edu.
