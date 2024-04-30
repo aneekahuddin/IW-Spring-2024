@@ -32,7 +32,7 @@ import audiobook as ab
        EXT 3: Change GTTS to a more "human" voice'''
 
 
-sBotIntro = "Hi! I'm Storyteller Bot! I can't wait to read with you. If you'd like to listen to a book, press one. If you'd like to read a book, press two. \nYour Option (Press Enter to Continue): "
+sBotIntro = "Hi! I'm Storyteller Bot! I can't wait to read with you. If you'd like to read a book, press one. If you'd like to listen to a book, press two. \nYour Option (Press Enter to Continue): "
 os.system("afplay AudioInstructions/sBotIntro.mp3")
 option = input(sBotIntro)
 if option == "1":

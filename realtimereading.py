@@ -17,6 +17,7 @@ If there has not been a a command in 5+ minutes during the “scanning step” t
 from gtts import gTTS 
 import os
 import cv2 
+import html
 
 def detect_text(path):
     """Detects text in the file."""
@@ -31,7 +32,7 @@ def detect_text(path):
 
     response = client.text_detection(image=image)
     texts = response.text_annotations
-    print("Texts:")
+    #print("Texts:")
     return texts[0].description
 
     '''for text in texts:
@@ -48,6 +49,62 @@ def detect_text(path):
             "{}\nFor more info on error messages, check: "
             "https://cloud.google.com/apis/design/errors".format(response.error.message)
         )
+
+def text_to_speech(text: str, outfile: str) -> str:
+    """Converts plaintext to SSML and
+    generates synthetic audio from SSML
+
+    Args:
+
+    text: text to synthesize
+    outfile: filename to use to store synthetic audio
+
+    Returns:
+    String of synthesized audio
+    """
+    from google.cloud import texttospeech
+    # Replace special characters with HTML Ampersand Character Codes
+    # These Codes prevent the API from confusing text with
+    # SSML commands
+    # For example, '<' --> '&lt;' and '&' --> '&amp;'
+    escaped_lines = html.escape(text)
+
+    # Convert plaintext to SSML in order to wait two seconds
+    #   between each line in synthetic speech
+    ssml = "<speak>{}</speak>".format(
+        escaped_lines.replace("\n", '\n<break time="2s"/>')
+    )
+
+    # Instantiates a client
+    client = texttospeech.TextToSpeechClient()
+
+    # Sets the text input to be synthesized
+    synthesis_input = texttospeech.SynthesisInput(ssml=ssml)
+
+    # Builds the voice request, selects the language code ("en-US") and
+    # the SSML voice gender ("MALE")
+    voice = texttospeech.VoiceSelectionParams(
+        language_code="en-US", ssml_gender=texttospeech.SsmlVoiceGender.MALE
+    )
+
+    # Selects the type of audio file to return
+    audio_config = texttospeech.AudioConfig(
+        audio_encoding=texttospeech.AudioEncoding.MP3
+    )
+
+    # Performs the text-to-speech request on the text input with the selected
+    # voice parameters and audio file type
+
+    request = texttospeech.SynthesizeSpeechRequest(
+        input=synthesis_input, voice=voice, audio_config=audio_config
+    )
+
+    response = client.synthesize_speech(request=request)
+
+    # Writes the synthetic audio to the output file.
+    with open(outfile, "wb") as out:
+        out.write(response.audio_content)
+        print("Audio content written to file " + outfile)
 
 # set up camera:
 def realTimeReading():
@@ -78,10 +135,12 @@ def realTimeReading():
                 break
 
             page_text = detect_text("img1.png")
-            readAloudSound = gTTS(text = page_text, lang = "en", slow = False)
-            readAloudSound.save("AudioInstructions/readAloud.mp3")
-
-            os.system("afplay AudioInstructions/readAloud.mp3")
+            #page_text = "HELLO I'M A GOOFY GOOBER YEAH, YOU'RE A GOOFY GOOBER YEAH"
+            #readAloudSound = gTTS(text = page_text, lang = "en", slow = False)
+            #readAloudSound.save("AudioInstructions/readAloud.mp3")
+            audiofilename = text_to_speech(page_text, "AudioInstructions/read.mp3")
+            #audiofilename = "AudioInstructions/read.mp3"
+            os.system("afplay " + "AudioInstructions/read.mp3")
 
             print("here")
         if option == "X" or option =="x":
