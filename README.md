@@ -13,8 +13,8 @@ You may need to change the cam_port number in real time reading to match the cor
 Check "Additional Info" for a video of a working demo and a research paper that outlines the design and development process and next steps! If you'd like to get involved, please reach out to auddin@princeton.edu.
 
 ### Future Steps:
-Create the gamification + account stuff
-Create bounding box around the book?
-Create translation 
-Python GUI / Updated UI
-Can you do screens (kindles and phone screens?)
+- Create the gamification + account stuff
+- Create bounding box around the book?
+- Create translation 
+- Python GUI / Updated UI
+- Can you do screens (kindles and phone screens?)
